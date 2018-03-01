@@ -1,6 +1,6 @@
 <template lang="pug">
 .tree-view-wrapper
-  tree-view-item.tree-view-item-root(:data='parsedData' :data-type='dataType' :max-depth='allOptions.maxDepth' :current-depth='0' :modifiable='allOptions.modifiable' @change-data='onChangeData')
+  tree-view-item.tree-view-item-root(:data='parsedData' :data-type='dataType' :max-depth='allOptions.maxDepth' :current-depth='0' :modifiable='allOptions.modifiable' @change-data='onChangeData' @prompt-modify='onPromptModify')
 </template>
 
 <script>
@@ -132,6 +132,10 @@ export default {
         this.$emit('change-data', data);
       }
     },
+    onPromptModify: function(path, data) {     
+      path = _.dropRight(_.drop(path));
+      this.$emit('prompt-modify', path, data);
+    }
   }
 };
 </script>

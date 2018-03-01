@@ -1,8 +1,8 @@
 <template lang="pug">
 div
   span.tree-view-item-key {{ keyString }}
-  input.tree-view-item-value(v-if='modifiable', :class='getValueType(data)', v-model='valueString', @keyup.enter='onUpdateData', @blur='onUpdateData')
-  span.tree-view-item-value(v-else, :class='getValueType(data)') {{ valueFormed }}
+  span.tree-view-item-value(:class='getValueType(data)') {{ valueFormed }}
+  span.tree-view-item-edit(v-if='modifiable' @click.prevent='promptModify') #
   span(v-show='error') {{ error }}
 </template>
 
@@ -45,6 +45,11 @@ export default {
     }
   },
   methods: {
+    promptModify: function() {
+      if(this.dataType === 'sdjson') {
+        this.$emit('prompt-modify', [this.data.key], this.data);
+      }
+    },
     onUpdateData: function() {
       try {
         let v = this.typedValue(this.valueString);
@@ -137,3 +142,10 @@ export default {
   }
 };
 </script>
+
+<style lang="sass" scoped>
+.tree-view-item-edit
+  margin-left: 12px
+  color: grey
+  cursor: pointer
+</style>

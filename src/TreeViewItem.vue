@@ -5,14 +5,14 @@
       span.tree-view-item-key.tree-view-item-key-with-chevron(:class='{opened: isOpen()}') {{getKey(data)}}
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length === 1') {{data.children.length}} property
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length !== 1') {{data.children.length}} properties
-    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
+    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData', @prompt-modify='onPromptModify')
   .tree-view-item-leaf(v-if='isArray(data)')
     .tree-view-item-node(@click.stop='toggleOpen()')
       span.tree-view-item-key.tree-view-item-key-with-chevron(:class='{opened: isOpen()}') {{getKey(data)}}
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length === 1') {{data.children.length}} item
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length !== 1') {{data.children.length}} items
-    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
-  tree-view-item-value.tree-view-item-leaf(v-if='isValue(data)', :key-string='getKey(data)', :data='getValue(data)' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
+    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData', @prompt-modify='onPromptModify')
+  tree-view-item-value.tree-view-item-leaf(v-if='isValue(data)', :key-string='getKey(data)', :data='getValue(data)' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData', @prompt-modify='onPromptModify')
 </template>
 
 <script>
@@ -99,6 +99,10 @@ export default {
     onChangeData: function(path, value) {
       path = _.concat(this.data.key, path);
       this.$emit('change-data', path, value);
+    },
+    onPromptModify: function(path, data) {
+      path = _.concat(this.data.key, path);
+      this.$emit('prompt-modify', path, data);
     }
   }
 };

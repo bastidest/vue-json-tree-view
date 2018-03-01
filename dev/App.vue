@@ -2,9 +2,9 @@
 .app
   h1 Dev test
   .one
-    tree-view(data-type='json' :data='json')
+    tree-view(data-type='json' :data='json' :options='options')
   .two
-    tree-view(data-type='sdjson' :data='sdjson')
+    tree-view(data-type='sdjson' :data='sdjson' :options='options')
 </template>
 
 <script>
@@ -23,7 +23,10 @@ export default {
   data() {
     return {
       json: testJson,
-      sdjson: testSdjson
+      sdjson: testSdjson,
+      options: {
+        modifiable: true
+      }
     };
   },
   computed: {
