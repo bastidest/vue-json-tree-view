@@ -4,17 +4,19 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from 'vue';
+import TreeView from '../src';
+Vue.use(TreeView);
 
 export default {
-  name: 'app',
+  name: 'App',
+  components: {
+
+  },
   data() {
     return {
 
-    }
-  },
-  components: {
-
+    };
   },
   computed: {
 
@@ -28,7 +30,7 @@ export default {
   methods: {
 
   }
-}
+};
 
 </script>
 

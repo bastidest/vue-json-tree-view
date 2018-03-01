@@ -1,11 +1,17 @@
 module.exports = {
+    "plugins": [
+        "vue"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:vue/recommended"
+    ],
     "env": {
         "browser": true,
         "commonjs": true,
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
