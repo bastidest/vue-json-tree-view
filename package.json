@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "repository": "bastidest/vue-json-tree-view",
   "description": "a JSON Tree View Component in Vue.js",
-  "main": "./dist/vue-json-tree-view.min.js",
+  "main": "./dist/bastidest-vue-json-tree-view.min.js",
   "scripts": {
     "dev": "node ./dev/dev-server.js",
     "build": "webpack-cli --progress --config webpack.prod.config.js"
