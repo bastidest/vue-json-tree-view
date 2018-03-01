@@ -1,14 +1,12 @@
-/**
- * @file webpack dev config file
- */
 var config = require('./webpack.base.config');
 var path = require('path');
 
-config.entry = './index.js';
+config.mode = 'development';
+config.entry = './dev/index.js';
 config.output = {
-    path: path.resolve('build') + '/',
-    publicPath: 'build',
-    filename: 'build.js'
+  path: path.resolve('dist') + '/',
+  publicPath: 'dist',
+  filename: 'bundle.js'
 };
 
 module.exports = config;
