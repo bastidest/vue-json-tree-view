@@ -5,14 +5,14 @@
       span.tree-view-item-key.tree-view-item-key-with-chevron(:class='{opened: isOpen()}') {{getKey(data)}}
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length === 1') {{data.children.length}} property
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length !== 1') {{data.children.length}} properties
-    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child', :modifiable='modifiable', @change-data='onChangeData')
+    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
   .tree-view-item-leaf(v-if='isArray(data)')
     .tree-view-item-node(@click.stop='toggleOpen()')
       span.tree-view-item-key.tree-view-item-key-with-chevron(:class='{opened: isOpen()}') {{getKey(data)}}
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length === 1') {{data.children.length}} item
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length !== 1') {{data.children.length}} items
-    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child', :modifiable='modifiable', @change-data='onChangeData')
-  tree-view-item-value.tree-view-item-leaf(v-if='isValue(data)', :key-string='getKey(data)', :data='data.value', :modifiable='modifiable', @change-data='onChangeData')
+    tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
+  tree-view-item-value.tree-view-item-leaf(v-if='isValue(data)', :key-string='getKey(data)', :data='data.value' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
 </template>
 
 <script>
@@ -28,6 +28,14 @@ export default {
     'data': {
       type: [Object, Array, String, Number, Boolean, Symbol],
       default: () => {return {};}
+    },
+    'data-type': {
+      type: String,
+      validator: (value) => {
+        // plain json or self descriptive json
+        return value === 'json' || value === 'sdjson';
+      },
+      default: 'json'
     },
     'max-depth': {
       type: Number,
@@ -61,7 +69,15 @@ export default {
       return value.type === 'array';
     },
     isValue: function(value){
-      return value.type === 'value';
+      if(this.dataType === 'json') {
+        return value.type === 'value';
+      } else {
+        return (value.type === 'boolean'
+          || value.type === 'number'
+          || value.type === 'string'
+          || value.type === 'enum'
+          || value.type === 'null');
+      }
     },
     getKey: function(value){
       if (_.isInteger(value.key)) {

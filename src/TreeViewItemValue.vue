@@ -1,8 +1,8 @@
 <template lang="pug">
 div
-  span.tree-view-item-key {{keyString}}
+  span.tree-view-item-key {{ keyString }}
   input.tree-view-item-value(v-if='modifiable', :class='getValueType(data)', v-model='valueString', @keyup.enter='onUpdateData', @blur='onUpdateData')
-  span.tree-view-item-value(v-else='', :class='getValueType(data)') {{ valueFormed }}
+  span.tree-view-item-value(v-else, :class='getValueType(data)') {{ valueFormed }}
   span(v-show='error') {{ error }}
 </template>
 
@@ -15,6 +15,14 @@ export default {
     'data': {
       type: [Object, Array, String, Number, Boolean, Symbol],
       default: () => {return {};}
+    },
+    'data-type': {
+      type: String,
+      validator: (value) => {
+        // plain json or self descriptive json
+        return value === 'json' || value === 'sdjson';
+      },
+      default: 'json'
     },
     'modifiable': {
       type: Boolean,

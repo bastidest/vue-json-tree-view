@@ -1,7 +1,10 @@
 <template lang="pug">
 .app
   h1 Dev test
-  tree-view(:data='data')
+  .one
+    tree-view(data-type='json' :data='json')
+  .two
+    tree-view(data-type='sdjson' :data='sdjson')
 </template>
 
 <script>
@@ -10,6 +13,7 @@ import TreeView from '../src';
 Vue.use(TreeView);
 
 import testJson from './res/test-json';
+import testSdjson from './res/test-sdjson';
 
 export default {
   name: 'App',
@@ -18,7 +22,8 @@ export default {
   },
   data() {
     return {
-      data: testJson
+      json: testJson,
+      sdjson: testSdjson
     };
   },
   computed: {
@@ -38,5 +43,16 @@ export default {
 </script>
 
 <style lang="sass">
+.tree-view-item-value-string
+  color: red
 
+.tree-view-item-value-number, .tree-view-item-value-null
+  color: blue
+
+.tree-view-item-value-boolean
+  color: green
+
+.one, .two
+  width: 50%
+  display: inline-block
 </style>

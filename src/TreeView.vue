@@ -1,6 +1,6 @@
 <template lang="pug">
 .tree-view-wrapper
-  tree-view-item(class='tree-view-item-root' :data='parsedData' :max-depth='allOptions.maxDepth' :current-depth='0' :modifiable='allOptions.modifiable' @change-data='onChangeData')
+  tree-view-item.tree-view-item-root(:data='parsedData' :data-type='dataType' :max-depth='allOptions.maxDepth' :current-depth='0' :modifiable='allOptions.modifiable' @change-data='onChangeData')
 </template>
 
 <script>
@@ -13,11 +13,19 @@ export default {
     TreeViewItem
   },
   props: {
-    data: {
+    'data': {
       type: [Object, Array, String, Number, Boolean, Symbol],
       default: () => {return {};}
     },
-    options: {
+    'data-type': {
+      type: String,
+      validator: (value) => {
+        // plain json or self descriptive json
+        return value === 'json' || value === 'sdjson';
+      },
+      default: 'json'
+    },
+    'options': {
       type: Object,
       default: () => {return {};}
     }
@@ -31,17 +39,21 @@ export default {
       }, (this.options || {}) );
     },
     parsedData: function(){
-      // Take the JSON data and transform
-      // it into the Tree View DSL
+      if(this.dataType === 'sdjson') {
+        return this.data;
+      } else {
+        // Take the JSON data and transform
+        // it into the Tree View DSL
 
-      // Strings or Integers should not be attempted to be split, so we generate
-      // a new object with the string/number as the value
-      if (this.isValue(this.data)) {
-        return this.transformValue(this.data, this.allOptions.rootObjectKey);
+        // Strings or Integers should not be attempted to be split, so we generate
+        // a new object with the string/number as the value
+        if (this.isValue(this.data)) {
+          return this.transformValue(this.data, this.allOptions.rootObjectKey);
+        }
+
+        // If it's an object or an array, transform as an object
+        return this.transformObject(this.data, this.allOptions.rootObjectKey, true);
       }
-
-      // If it's an object or an array, transform as an object
-      return this.transformObject(this.data, this.allOptions.rootObjectKey, true);
     }
   },
   methods: {
