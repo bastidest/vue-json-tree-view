@@ -63,7 +63,7 @@ module.exports = {
     }, {
       type: 'number',
       key: 2,
-      value: 54
+      value: 55
     }]
   }, {
     type: 'object',

@@ -76,34 +76,63 @@ export default {
       }
     },
     getValue: function(value){
-      if (_.isNumber(value)) {
+      if(this.dataType === 'json') {
+        if (_.isNumber(value)) {
+          return value;
+        }
+        if (_.isNull(value)) {
+          return 'null';
+        }
+        if (_.isString(value)) {
+          return '"' + value + '"';
+        }
         return value;
+      } else {
+        if (value.type === 'string') {
+          return '"' + value.value + '"';
+        }
+        if (value.type === 'null') {
+          return 'null';
+        }
+        return value.value;
       }
-      if (_.isNull(value)) {
-        return 'null';
-      }
-      if (_.isString(value)) {
-        return '"' + value + '"';
-      }
-      return value;
     },
     getValueType: function(value, prefix='tree-view-item-value-'){
-      if (_.isNumber(value)) {
-        return prefix + 'number';
+      if(this.dataType === 'json') {
+        if (_.isNumber(value)) {
+          return prefix + 'number';
+        }
+        if (_.isFunction(value)) {
+          return prefix + 'function';
+        }
+        if (_.isBoolean(value)) {
+          return prefix + 'boolean';
+        }
+        if (_.isNull(value)) {
+          return prefix + 'null';
+        }
+        if (_.isString(value)) {
+          return prefix + 'string';
+        }
+        return prefix + 'unknown';
+      } else {
+        if (value.type === 'number') {
+          return prefix + 'number';
+        }
+        if (value.type === 'boolean') {
+          return prefix + 'boolean';
+        }
+        if (value.type === 'null') {
+          return prefix + 'null';
+        }
+        if (value.type === 'string') {
+          return prefix + 'string';
+        }
+        if (value.type === 'enum') {
+          return prefix + 'enum';
+        }
+        return prefix + 'unknown';
       }
-      if (_.isFunction(value)) {
-        return prefix + 'function';
-      }
-      if (_.isBoolean(value)) {
-        return prefix + 'boolean';
-      }
-      if (_.isNull(value)) {
-        return prefix + 'null';
-      }
-      if (_.isString(value)) {
-        return prefix + 'string';
-      }
-      return prefix + 'unknown';
     }
   }
 };

@@ -12,7 +12,7 @@
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length === 1') {{data.children.length}} item
       span.tree-view-item-hint(v-show='!isOpen() && data.children.length !== 1') {{data.children.length}} items
     tree-view-item(:key='getKey(child)', :max-depth='maxDepth', :current-depth='currentDepth+1', v-show='isOpen()', v-for='child in data.children', :data='child' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
-  tree-view-item-value.tree-view-item-leaf(v-if='isValue(data)', :key-string='getKey(data)', :data='data.value' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
+  tree-view-item-value.tree-view-item-leaf(v-if='isValue(data)', :key-string='getKey(data)', :data='getValue(data)' :data-type='dataType', :modifiable='modifiable', @change-data='onChangeData')
 </template>
 
 <script>
@@ -84,6 +84,13 @@ export default {
         return value.key+':';
       } else {
         return '"' + value.key + '":';
+      }
+    },
+    getValue(data) {
+      if(this.dataType === 'json') {
+        return data.value;
+      } else {
+        return data;
       }
     },
     isRootObject: function(value = this.data){
