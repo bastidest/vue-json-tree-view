@@ -2,6 +2,12 @@ module.exports = {
   type: 'object',
   key: '__root__',
   children: [{
+    type: 'map',
+    key: 'map_test',
+    value: {
+      size: 10
+    }
+  },{
     type: 'object',
     key: 'colors',
     children: [{

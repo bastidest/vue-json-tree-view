@@ -72,18 +72,14 @@ export default {
       if(this.dataType === 'json') {
         return value.type === 'value';
       } else {
-        return (value.type === 'boolean'
-          || value.type === 'number'
-          || value.type === 'string'
-          || value.type === 'enum'
-          || value.type === 'null');
+        return (value.type !== 'object' && value.type !== 'array');
       }
     },
     getKey: function(value){
       if (_.isInteger(value.key)) {
-        return value.key+':';
+        return value.key.toString();
       } else {
-        return '"' + value.key + '":';
+        return '"' + value.key + '"';
       }
     },
     getValue(data) {
@@ -114,6 +110,9 @@ export default {
   font-family: monaco, monospace
   font-size: 14px
   margin-left: 18px
+
+.tree-view-item-node, .tree-view-item-leaf
+  display: inline-block
 
 .tree-view-item-node 
   cursor: pointer

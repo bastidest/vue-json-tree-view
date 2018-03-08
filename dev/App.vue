@@ -58,6 +58,9 @@ export default {
 .tree-view-item-value-enum
   color: #da5d04
 
+.tree-view-item-value-unknown
+  color: #757575
+
 .one, .two
   width: 50%
   display: inline-block

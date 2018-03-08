@@ -1,8 +1,10 @@
 <template lang="pug">
 div
   span.tree-view-item-key {{ keyString }}
+  span.tree-view-item-type(v-if='data && !isKnownType') [{{ data.type }}]
+  span.tree-view-item-separator :
   span.tree-view-item-value(:class='getValueType(data)') {{ valueFormed }}
-  span.tree-view-item-edit(v-if='modifiable' @click.prevent='promptModify') #
+  span.tree-view-item-edit(v-if='isKnownType && modifiable' @click.prevent='promptModify') #
   span(v-show='error') {{ error }}
 </template>
 
@@ -10,7 +12,7 @@ div
 import _ from 'lodash';
 
 export default {
-  name: 'TreeViewItem',
+  name: 'TreeViewItemValue',
   props: {
     'data': {
       type: [Object, Array, String, Number, Boolean, Symbol],
@@ -42,6 +44,17 @@ export default {
   computed: {
     valueFormed: function () {
       return this.getValue(this.data);
+    },
+    isKnownType: function() {
+      if(this.dataType === 'json') {
+        return true;
+      } else {
+        return this.data && (this.data.type === 'boolean'
+            || this.data.type === 'number'
+            || this.data.type === 'string'
+            || this.data.type === 'enum'
+            || this.data.type === 'null');
+      }
     }
   },
   methods: {
@@ -99,7 +112,7 @@ export default {
         if (value.type === 'null') {
           return 'null';
         }
-        return value.value;
+        return JSON.stringify(value.value);
       }
     },
     getValueType: function(value, prefix='tree-view-item-value-'){
@@ -148,4 +161,11 @@ export default {
   margin-left: 12px
   color: grey
   cursor: pointer
+
+.tree-view-item-type
+  color: #757575
+  margin-left: 4px
+
+.tree-view-item-separator
+  margin-right: 4px
 </style>
